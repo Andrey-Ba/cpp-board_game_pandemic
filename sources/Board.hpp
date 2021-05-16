@@ -10,6 +10,7 @@ namespace pandemic
     class Board
     {
     private:
+        // Makes sure to delete the pointer only from the original board.
         bool original;
         // How many sick people in each city.
         std::array<int, num_of_cities> *sickness;
@@ -25,14 +26,14 @@ namespace pandemic
             cures = new std::array<bool, num_of_colors>;
             stations = new std::array<bool, num_of_cities>;
             for(unsigned long i = 0; i < num_of_cities; i++)
-                {
-                    sickness->at(i) = 0;
-                    stations->at(i) = 0;
-                }
-                for(unsigned long i = 0; i < num_of_colors; i++)
-                {
-                    cures->at(i) = 0;
-                }
+            {
+                sickness->at(i) = 0;
+                stations->at(i) = false;
+            }
+            for(unsigned long i = 0; i < num_of_colors; i++)
+            {
+                cures->at(i) = false;
+            }
         }
         Board(const Board& b)
         {
@@ -44,9 +45,18 @@ namespace pandemic
         ~Board(){
             if(original)
             {
-            delete sickness;
-            delete cures;
-            delete stations;
+                if(sickness != nullptr)
+                {
+                    delete sickness;
+                }
+                if(cures != nullptr)
+                {
+                    delete cures;
+                }
+                if(stations != nullptr)
+                {
+                    delete stations;
+                }
             }
         }
 

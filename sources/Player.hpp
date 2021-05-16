@@ -29,7 +29,7 @@ namespace pandemic
             }
             ~Player(){}
 
-            Player& drive(const City destination);
+            virtual Player& drive(const City destination);
             virtual Player& fly_direct(const City destination);
             virtual Player& fly_charter(const City destination);
             virtual Player& fly_shuttle(const City destination);

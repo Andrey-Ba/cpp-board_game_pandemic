@@ -6,7 +6,7 @@ namespace pandemic
     {
         if(!Board::hasConnection(city, destination))
         {
-            throw std::runtime_error("Unreachable city " + getCityname((unsigned long)(city)) + " to " + getCityname((unsigned long)(destination)));
+            throw std::runtime_error("Cannot drive from " + getCityname((unsigned long)(city)) + " to " + getCityname((unsigned long)(destination)));
         }
         city = destination;
         return *this;
@@ -23,7 +23,7 @@ namespace pandemic
         }
         city = destination;
         cards.at((unsigned long)destination) = false;
-        count_colored_cards.at((unsigned long)Board::getCityColor(city))--;
+        count_colored_cards.at((unsigned long)Board::getCityColor(destination))--;
         return *this;
     }
     Player& Player::fly_charter(const City destination)
@@ -49,7 +49,7 @@ namespace pandemic
         }
         if(!board->hasStation(city))
         {
-            throw "No station";
+            throw std::runtime_error("No station");
         }
         if(!board->hasStation(destination))
         {
@@ -69,6 +69,7 @@ namespace pandemic
             throw std::runtime_error("Don't have proper card");
         }
         board->buildStation(city);
+        cards.at((unsigned long)city) = false;
         count_colored_cards.at((unsigned long)Board::getCityColor(city))--;
         return *this;
     }
@@ -79,11 +80,10 @@ namespace pandemic
             throw "No station";
         }
 
-        if( count_colored_cards.at((unsigned long)color) < five)
+        if(count_colored_cards.at((unsigned long)color) < five)
         {
             throw "Not enough cards";
         }
-        
         if(board->cure(color))
         {
             int droped_cards = 0;
